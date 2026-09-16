@@ -13,6 +13,9 @@ coverage/
 .vite/
 target/
 .gradle/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
 .venv/
 venv/
 __pycache__/

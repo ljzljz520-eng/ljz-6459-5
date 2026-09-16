@@ -1,0 +1,27 @@
+name: ion_nitriding_tablet
+description: '离子氮化批次平板端: 登记/确认/执行/阶段曲线打弧/辉光人工观察'
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ion_nitriding_core:
+    path: ../core
+  drift: ^2.20.0
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  drift_dev: ^2.20.0
+  build_runner: ^2.4.12
+
+flutter:
+  uses-material-design: true

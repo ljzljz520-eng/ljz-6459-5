@@ -1,0 +1,49 @@
+# 车间本地部署: FastAPI 批次接口 + InfluxDB 炉体时序。
+# arc_events 写入独立 bucket (arc-events), 保留期 infinite —— 局部打弧必须保留。
+services:
+  api:
+    build: ./backend
+    environment:
+      NITRIDING_DB: /data/nitriding.db
+      INFLUX_URL: http://influxdb:8086
+      INFLUX_TOKEN: workshop-token
+      INFLUX_ORG: nitriding
+      INFLUX_BUCKET: furnace
+      INFLUX_ARC_BUCKET: arc-events
+    ports:
+      - "8000:8000"
+    depends_on:
+      - influxdb
+    volumes:
+      - workshop-data:/data
+
+  influxdb:
+    image: influxdb:2.7
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: workshop
+      DOCKER_INFLUXDB_INIT_PASSWORD: workshop-password
+      DOCKER_INFLUXDB_INIT_ORG: nitriding
+      DOCKER_INFLUXDB_INIT_BUCKET: furnace
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: workshop-token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influx-data:/var/lib/influxdb2
+
+  # 初始化无限保留期的 arc-events bucket (打弧事件永久保留)。
+  arc-bucket-init:
+    image: influxdb:2.7
+    depends_on:
+      - influxdb
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        sleep 8
+        influx bucket create --org nitriding --name arc-events --retention 0 \
+          --host http://influxdb:8086 --token workshop-token || true
+
+volumes:
+  influx-data:
+  workshop-data:

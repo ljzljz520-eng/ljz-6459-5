@@ -1,0 +1,13 @@
+name: ion_nitriding_core
+description: '离子氮化批次平板端业务逻辑(纯Dart): 领域模型/规则/阶段聚合/API客户端'
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  http: ^1.2.2
+
+dev_dependencies:
+  test: ^1.25.0
